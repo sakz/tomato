@@ -103,7 +103,7 @@
 ### 文件策略
 
 - 保留 `app-icon.svg` 作为现有通用主源，不直接覆盖，避免影响其他平台后续重导出
-- 新增一个 `macOS` 专用源文件，例如 `app-icon-macos.svg`
+- 新增一个 `macOS` 专用源文件 `app-icon-macos.svg`
 - 使用该 macOS 专用源图重新生成 `src-tauri/icons/icon.icns`
 - 不修改 `src-tauri/tauri.conf.json`，继续引用现有 `icons/icon.icns`
 
