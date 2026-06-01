@@ -4,6 +4,9 @@ pub mod db;
 pub mod models;
 pub mod commands;
 
+use tauri::Emitter;
+use tauri_plugin_global_shortcut::{Builder as GlobalShortcutBuilder, Code, ShortcutState};
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -14,6 +17,26 @@ pub fn run() {
                     "sqlite:tomato.db",
                     crate::db::get_migrations(),
                 )
+                .build(),
+        )
+        .plugin(tauri_plugin_notification::init())
+        .plugin(
+            GlobalShortcutBuilder::new()
+                .with_shortcuts(["CmdOrCtrl+Shift+Space", "CmdOrCtrl+Shift+X"])
+                .unwrap()
+                .with_handler(move |app: &tauri::AppHandle, shortcut: &tauri_plugin_global_shortcut::Shortcut, event: tauri_plugin_global_shortcut::ShortcutEvent| {
+                    if event.state == ShortcutState::Pressed {
+                        match shortcut.key {
+                            Code::Space => {
+                                let _ = app.emit("global-shortcut", "toggle-pause");
+                            }
+                            Code::KeyX => {
+                                let _ = app.emit("global-shortcut", "stop");
+                            }
+                            _ => {}
+                        }
+                    }
+                })
                 .build(),
         )
         .invoke_handler(tauri::generate_handler![

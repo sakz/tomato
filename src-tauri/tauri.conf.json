@@ -14,7 +14,11 @@
       {
         "title": "Tomato",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "minWidth": 400,
+        "minHeight": 300,
+        "resizable": true,
+        "decorations": true
       }
     ],
     "security": {

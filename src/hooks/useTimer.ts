@@ -1,6 +1,7 @@
 import { useEffect, useRef, useCallback } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { listen } from "@tauri-apps/api/event";
 import { useTimerStore } from "../stores/timerStore";
 import { useSettingsStore } from "../stores/settingsStore";
 
@@ -167,6 +168,20 @@ export function useTimer() {
       resume();
     }
   }, [status, pause, resume]);
+
+  // Global shortcut listener
+  useEffect(() => {
+    const unlisten = listen<string>("global-shortcut", (event) => {
+      if (event.payload === "toggle-pause") {
+        togglePause();
+      } else if (event.payload === "stop") {
+        stopPomodoro();
+      }
+    });
+    return () => {
+      unlisten.then((fn) => fn());
+    };
+  }, [togglePause, stopPomodoro]);
 
   return {
     startPomodoro,
