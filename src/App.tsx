@@ -1,10 +1,22 @@
-import "./index.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
+import TimerPage from "./pages/TimerPage";
+import TasksPage from "./pages/TasksPage";
+import StatsPage from "./pages/StatsPage";
+import SettingsPage from "./pages/SettingsPage";
 
 function App() {
   return (
-    <main className="flex items-center justify-center h-screen bg-[#1a1a1a]">
-      <h1 className="text-3xl font-bold text-gray-200">🍅 Tomato</h1>
-    </main>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<TimerPage />} />
+          <Route path="/tasks" element={<TasksPage />} />
+          <Route path="/stats" element={<StatsPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
