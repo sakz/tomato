@@ -1,5 +1,4 @@
 use crate::models::Task;
-use serde_json::json;
 use sqlx::{Pool, Sqlite};
 use tauri::{AppHandle, Manager};
 use tauri_plugin_sql::{DbInstances, DbPool};
@@ -22,8 +21,8 @@ pub async fn create_task(
     let pool = get_pool(&app).await?;
 
     let result = sqlx::query("INSERT INTO tasks (name, color) VALUES (?, ?)")
-        .bind(json!(name))
-        .bind(json!(color))
+        .bind(&name)
+        .bind(&color)
         .execute(&pool)
         .await
         .map_err(|e| e.to_string())?;
@@ -83,8 +82,8 @@ pub async fn update_task(
     let pool = get_pool(&app).await?;
 
     sqlx::query("UPDATE tasks SET name = ?, color = ?, updated_at = datetime('now') WHERE id = ?")
-        .bind(json!(name))
-        .bind(json!(color))
+        .bind(&name)
+        .bind(&color)
         .bind(id)
         .execute(&pool)
         .await

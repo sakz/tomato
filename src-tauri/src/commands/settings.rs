@@ -1,5 +1,4 @@
 use crate::models::Settings;
-use serde_json::{json, Value};
 use sqlx::{Pool, Sqlite};
 use tauri::{AppHandle, Manager};
 use tauri_plugin_sql::{DbInstances, DbPool};
@@ -47,17 +46,17 @@ pub async fn get_settings(app: AppHandle) -> Result<Settings, String> {
 pub async fn update_settings(app: AppHandle, settings: Settings) -> Result<(), String> {
     let pool = get_pool(&app).await?;
 
-    let pairs: Vec<(&str, Value)> = vec![
-        ("work_duration", json!(settings.work_duration.to_string())),
-        ("short_break_duration", json!(settings.short_break_duration.to_string())),
-        ("long_break_duration", json!(settings.long_break_duration.to_string())),
-        ("intervals_before_long_break", json!(settings.intervals_before_long_break.to_string())),
+    let pairs: Vec<(&str, String)> = vec![
+        ("work_duration", settings.work_duration.to_string()),
+        ("short_break_duration", settings.short_break_duration.to_string()),
+        ("long_break_duration", settings.long_break_duration.to_string()),
+        ("intervals_before_long_break", settings.intervals_before_long_break.to_string()),
     ];
 
     for (key, value) in pairs {
         sqlx::query("INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)")
-            .bind(json!(key))
-            .bind(value)
+            .bind(key)
+            .bind(&value)
             .execute(&pool)
             .await
             .map_err(|e| e.to_string())?;
