@@ -16,7 +16,21 @@ pub fn run() {
                 )
                 .build(),
         )
-        .invoke_handler(tauri::generate_handler![])
+        .invoke_handler(tauri::generate_handler![
+            commands::tasks::create_task,
+            commands::tasks::get_tasks,
+            commands::tasks::update_task,
+            commands::tasks::archive_task,
+            commands::sessions::create_session,
+            commands::sessions::complete_session,
+            commands::sessions::abandon_session,
+            commands::stats::get_daily_stats,
+            commands::stats::get_weekly_stats,
+            commands::stats::get_yearly_stats,
+            commands::stats::get_task_stats,
+            commands::settings::get_settings,
+            commands::settings::update_settings,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

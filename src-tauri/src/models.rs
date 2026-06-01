@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, FromRow)]
 pub struct Task {
     pub id: i64,
     pub name: String,
@@ -8,11 +9,13 @@ pub struct Task {
     pub archived: bool,
     pub created_at: String,
     pub updated_at: String,
+    #[sqlx(default)]
     pub total_sessions: Option<i64>,
+    #[sqlx(default)]
     pub total_duration: Option<i64>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, FromRow)]
 pub struct PomodoroSession {
     pub id: i64,
     pub task_id: i64,
@@ -32,7 +35,7 @@ pub struct Settings {
     pub intervals_before_long_break: i64,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, FromRow)]
 pub struct TaskBreakdown {
     pub task_id: i64,
     pub task_name: String,
@@ -48,14 +51,14 @@ pub struct DailyStats {
     pub task_breakdown: Vec<TaskBreakdown>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, FromRow)]
 pub struct MonthlyStats {
     pub month: String,
     pub total_sessions: i64,
     pub total_duration: i64,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, FromRow)]
 pub struct TaskStats {
     pub task_id: i64,
     pub task_name: String,
