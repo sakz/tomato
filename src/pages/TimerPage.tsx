@@ -79,7 +79,7 @@ export default function TimerPage() {
   if (status === "short_break" || status === "long_break") {
     const isLong = status === "long_break";
     return (
-      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] px-4">
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-6rem)] px-4 pb-20">
         <h2 className="text-2xl font-bold text-green-400 mb-4">
           {isLong ? "🌴 长休息" : "☕ 短休息"}
         </h2>
@@ -107,7 +107,7 @@ export default function TimerPage() {
   // Non-fullscreen working
   if (status === "working" || status === "paused") {
     return (
-      <div className="flex flex-col items-center min-h-[calc(100vh-4rem)] px-4">
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-6rem)] px-4 pb-20">
         <h2 className="text-lg text-gray-400 mt-4 mb-2">{currentTaskName}</h2>
         {status === "paused" && (
           <span className="text-sm text-yellow-500 mb-2">已暂停</span>
@@ -120,7 +120,7 @@ export default function TimerPage() {
           completedPomodoros={completedPomodoros}
           intervalsBeforeLongBreak={settings.intervals_before_long_break}
         />
-        <div className="flex gap-4 mt-4">
+        <div className="flex gap-4 mt-6">
           <button
             onClick={togglePause}
             className="px-6 py-2 rounded-lg bg-gray-700 text-gray-300 hover:bg-gray-600"

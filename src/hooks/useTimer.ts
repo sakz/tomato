@@ -124,22 +124,26 @@ export function useTimer() {
 
   const startPomodoro = useCallback(
     async (taskId: number, taskName: string) => {
-      const session = await invoke<any>("create_session", {
-        taskId,
-        sessionType: "work",
-        plannedDuration: settings.work_duration,
-      });
-
-      startWork(taskId, taskName, session.id, settings.work_duration);
-
-      // Enter fullscreen
       try {
-        const win = getCurrentWindow();
-        await win.setFullscreen(true);
-      } catch {
-        // Window API not available
+        const session = await invoke<any>("create_session", {
+          taskId,
+          sessionType: "work",
+          plannedDuration: settings.work_duration,
+        });
+
+        // Update state first, then enter fullscreen
+        startWork(taskId, taskName, session.id, settings.work_duration);
+        setFullscreen(true);
+
+        try {
+          const win = getCurrentWindow();
+          await win.setFullscreen(true);
+        } catch {
+          // Window API not available
+        }
+      } catch (err) {
+        console.error("[startPomodoro] failed:", err);
       }
-      setFullscreen(true);
     },
     [settings.work_duration, startWork, setFullscreen]
   );

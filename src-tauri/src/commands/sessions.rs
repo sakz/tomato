@@ -1,5 +1,4 @@
 use crate::models::PomodoroSession;
-use serde_json::json;
 use sqlx::{Pool, Sqlite};
 use tauri::{AppHandle, Manager};
 use tauri_plugin_sql::{DbInstances, DbPool};
@@ -26,7 +25,7 @@ pub async fn create_session(
         "INSERT INTO pomodoro_sessions (task_id, session_type, planned_duration) VALUES (?, ?, ?)",
     )
     .bind(task_id)
-    .bind(json!(session_type))
+    .bind(&session_type)
     .bind(planned_duration)
     .execute(&pool)
     .await
