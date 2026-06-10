@@ -10,6 +10,7 @@ use tauri_plugin_global_shortcut::{Builder as GlobalShortcutBuilder, Code, Short
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .manage(commands::power::SharedKeepAwakeManager::default())
         .plugin(tauri_plugin_opener::init())
         .plugin(
             tauri_plugin_sql::Builder::default()
@@ -53,6 +54,8 @@ pub fn run() {
             commands::stats::get_task_stats,
             commands::settings::get_settings,
             commands::settings::update_settings,
+            commands::power::enable_keep_awake,
+            commands::power::disable_keep_awake,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

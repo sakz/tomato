@@ -14,6 +14,22 @@ async function sendNativeNotification(title: string, body: string) {
   }
 }
 
+async function enableKeepAwake() {
+  try {
+    await invoke("enable_keep_awake");
+  } catch (err) {
+    console.warn("[keepAwake] enable failed:", err);
+  }
+}
+
+async function disableKeepAwake() {
+  try {
+    await invoke("disable_keep_awake");
+  } catch (err) {
+    console.warn("[keepAwake] disable failed:", err);
+  }
+}
+
 function playSound() {
   try {
     const audio = new Audio("/sounds/bell.mp3");
@@ -96,6 +112,8 @@ export function useTimer() {
           : settings.short_break_duration;
 
         // Exit fullscreen for break
+        await disableKeepAwake();
+
         try {
           const win = getCurrentWindow();
           await win.setFullscreen(false);
@@ -134,6 +152,7 @@ export function useTimer() {
         // Update state first, then enter fullscreen
         startWork(taskId, taskName, session.id, settings.work_duration);
         setFullscreen(true);
+        await enableKeepAwake();
 
         try {
           const win = getCurrentWindow();
@@ -158,6 +177,7 @@ export function useTimer() {
     } catch {
       // Window API not available
     }
+    await disableKeepAwake();
     reset();
   }, [currentSessionId, reset]);
 
