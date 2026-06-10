@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getVersion } from "@tauri-apps/api/app";
 import { useSettingsStore } from "../stores/settingsStore";
 
 interface SettingRowProps {
@@ -43,9 +44,13 @@ export default function SettingsPage() {
   const [longBreak, setLongBreak] = useState(15);
   const [intervals, setIntervals] = useState(4);
   const [saved, setSaved] = useState(false);
+  const [appVersion, setAppVersion] = useState("0.1.2");
 
   useEffect(() => {
     fetchSettings();
+    getVersion()
+      .then(setAppVersion)
+      .catch(() => {});
   }, [fetchSettings]);
 
   useEffect(() => {
@@ -114,6 +119,14 @@ export default function SettingsPage() {
       >
         {saved ? "已保存 ✓" : "保存设置"}
       </button>
+
+      <section className="mt-8 rounded-lg bg-gray-800 border border-gray-700 px-4 py-4">
+        <h3 className="text-sm font-semibold text-gray-200 mb-3">关于</h3>
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-400">Tomato</span>
+          <span className="text-sm font-mono text-gray-300">v{appVersion}</span>
+        </div>
+      </section>
     </div>
   );
 }
